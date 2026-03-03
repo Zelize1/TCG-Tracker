@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "cards",
+  "info": {
+    "singularName": "card",
+    "pluralName": "cards",
+    "displayName": "Card"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "tcgdex_id": {
+      "type": "string",
+      "unique": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "setName": {
+      "type": "string"
+    },
+    "cardNumber": {
+      "type": "string"
+    },
+    "imageUrl": {
+      "type": "string"
+    },
+    "collected": {
+      "type": "boolean"
+    }
+  }
+}
