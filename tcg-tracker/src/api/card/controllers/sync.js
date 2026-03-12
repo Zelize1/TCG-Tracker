@@ -4,7 +4,7 @@ export default {
 
     for (const name of pokemonNames) {
       const response = await fetch(
-        `https://api.tcgdex.net/v2/en/cards?name=${name}`,
+        `https://api.tcgdex.net/v2/en/cards?name=${name}`
       );
 
       const cards = await response.json();
@@ -16,32 +16,27 @@ export default {
 
         if (!existing) {
           const fullResponse = await fetch(
-            `https://api.tcgdex.net/v2/en/cards/${card.id}`,
+            `https://api.tcgdex.net/v2/en/cards/${card.id}`
           );
 
           const fullCard = await fullResponse.json();
+
+          const imageUrl = fullCard.image ? `${fullCard.image}/high.webp` : "";
 
           await strapi.entityService.create("api::card.card", {
             data: {
               tcgdex_id: fullCard.id,
               name: fullCard.name,
               setName: fullCard.set?.name || "Unknown",
-              cardNumber: fullCard.localId,
-              imageUrl: fullCard.image?.high?.()
-                ? fullCard.image.high() + ".png"
-                : fullCard.image?.small?.()
-                  ? fullCard.image.small() + ".png"
-                  : "",
+              cardNumber: fullCard.localId || "",
+              imageUrl,
               collected: false,
             },
           });
-          console.log(JSON.stringify(fullCard, null, 2));
         }
       }
     }
-    
 
     ctx.send({ message: "Sync complete" });
   },
 };
-
