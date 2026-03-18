@@ -1,42 +1,49 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <meta charset="UTF-8" />
-  <title>TCGdex Test</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
+  <head>
+    <meta charset="UTF-8" />
+    <title>TCGdex Test</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <nav>
-        <a href="">Collected</a>
-        <a href="">Not collected</a>
+      <button class="active" data-tab="collected">
+        Collected <span id="count-collected">0</span>
+      </button>
+      <button data-tab="not-collected">
+        Not Collected <span id="count-not-collected">0</span>
+      </button>
     </nav>
 
-    <div class="test-container">
-        <div class="card-test">
-            <!-- eksempel: card-id = ASC 152/232. Property "id" -->
-            <h2 class="card-id-test"></h2>
-            <img src="" alt="">
-            <!-- pricing.cardmarket -->
-            <p class="card-price-test"></p>
-            <!-- variants (normal, reverse, holo, first edition)-->
-            <p class="card-variant-test"></p>
-        </div>
+    <div id="tab-collected" class="tab-panel active">
+      <h2 class="pokemon-title">Growlithe</h2>
+      <div class="card-container" id="collected-growlithe"></div>
+      <h2 class="pokemon-title">Arcanine</h2>
+      <div class="card-container" id="collected-arcanine"></div>
     </div>
 
-    <div class="card-container">
-        <div class="card">
-            <!-- eksempel: card-id = ASC 152/232. Property "id" -->
-            <h2 class="card-id"></h2>
-            <img src="" alt="">
-            <!-- pricing.cardmarket -->
-            <p class="card-price"></p>
-            <!-- variants (normal, reverse, holo, first edition)-->
-            <p class="card-variant"></p>
-        </div>
+    <div id="tab-not-collected" class="tab-panel">
+      <h2 class="pokemon-title">Growlithe</h2>
+      <div class="card-container" id="not-collected-growlithe"></div>
+      <h2 class="pokemon-title">Arcanine</h2>
+      <div class="card-container" id="not-collected-arcanine"></div>
     </div>
-
-<script src="/script/growlithe.js" type="module"></script>
-<script src="/script/arcanine.js" type="module"></script>
-</body>
+    <script>
+      document.querySelectorAll("nav button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll("nav button")
+            .forEach((b) => b.classList.remove("active"));
+          document
+            .querySelectorAll(".tab-panel")
+            .forEach((p) => p.classList.remove("active"));
+          btn.classList.add("active");
+          document
+            .getElementById(`tab-${btn.dataset.tab}`)
+            .classList.add("active");
+        });
+      });
+    </script>
+    <script src="/script/main.js" type="module"></script>
+  </body>
 </html>
