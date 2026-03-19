@@ -19,9 +19,18 @@
 
     <div id="tab-collected" class="tab-panel active">
       <div class="toolbar">
-        <select id="set-filter">
-          <option value="">All Sets</option>
-        </select>
+        <div class="toolbar-left">
+          <div class="search-group">
+            <input type="text" id="search-input" placeholder="Search..." />
+            <button class="toggle-btn" id="search-toggle" data-mode="set">Set Name</button>
+          </div>
+          <div class="filter-group">
+            <select id="set-filter">
+              <option value="">All Sets</option>
+            </select>
+            <button class="clear-btn" id="clear-filter">✕</button>
+          </div>
+        </div>
         <button class="export-btn" id="export-collected">Export Collected</button>
       </div>
       <div class="pokemon-section">
@@ -36,9 +45,18 @@
 
     <div id="tab-not-collected" class="tab-panel">
       <div class="toolbar">
-        <select id="set-filter-not-collected">
-          <option value="">All Sets</option>
-        </select>
+        <div class="toolbar-left">
+          <div class="search-group">
+            <input type="text" id="search-input-not-collected" placeholder="Search..." />
+            <button class="toggle-btn" id="search-toggle-not-collected" data-mode="set">Set Name</button>
+          </div>
+          <div class="filter-group">
+            <select id="set-filter-not-collected">
+              <option value="">All Sets</option>
+            </select>
+            <button class="clear-btn" id="clear-filter-not-collected">✕</button>
+          </div>
+        </div>
         <button class="export-btn" id="export-not-collected">Export Not Collected</button>
       </div>
       <div class="pokemon-section">

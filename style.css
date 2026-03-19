@@ -54,16 +54,72 @@ nav a:hover {
   display: block;
 }
 
-/* Toolbar: holds filter dropdown and export button */
+/* Toolbar */
 .toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
   border-bottom: 1px solid #3f4d5a;
+  gap: 10px;
 }
 
-.toolbar select {
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Search group */
+.search-group {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.search-group input {
+  background-color: #323d48;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  width: 180px;
+}
+
+.search-group input::placeholder {
+  color: #888;
+}
+
+.search-group input:focus {
+  outline: none;
+  background-color: #3f4d5a;
+}
+
+.toggle-btn {
+  background-color: #e8955a;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.toggle-btn:hover {
+  background-color: #a95316;
+}
+
+/* Filter group */
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.filter-group select {
   background-color: #323d48;
   color: white;
   border: none;
@@ -71,10 +127,26 @@ nav a:hover {
   font-family: "Montserrat", sans-serif;
   font-size: 14px;
   cursor: pointer;
+  height: 32px;
 }
 
-.toolbar select:hover {
+.filter-group select:hover {
   background-color: #3f4d5a;
+}
+
+.clear-btn {
+  background-color: #323d48;
+  color: #888;
+  border: none;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 32px;
+}
+
+.clear-btn:hover {
+  background-color: #3f4d5a;
+  color: white;
 }
 
 .export-btn {
@@ -85,12 +157,14 @@ nav a:hover {
   cursor: pointer;
   font-family: "Montserrat", sans-serif;
   font-size: 14px;
+  white-space: nowrap;
 }
 
 .export-btn:hover {
   background-color: #3f4d5a;
 }
 
+/* Card grid */
 .card-container {
   display: flex;
   flex-wrap: wrap;
@@ -147,7 +221,7 @@ nav a:hover {
 
 .pokemon-title::before {
   content: "▼";
-  font-size: 18px;
+  font-size: 12px;
   opacity: 0.8;
 }
 

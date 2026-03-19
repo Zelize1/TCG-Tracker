@@ -32,10 +32,78 @@ function populateSetFilter() {
   });
 }
 
-function applyFilter(selectedSet) {
+function applyFilters(searchValue, searchMode, selectedSet) {
   allCards.forEach(({ card, cardEl }) => {
-    const matches = !selectedSet || card.setName === selectedSet;
+    let matches = true;
+
+    if (searchValue) {
+      const query = searchValue.toLowerCase();
+      if (searchMode === "set") {
+        matches = (card.setName ?? "").toLowerCase().includes(query);
+      } else {
+        matches = (card.tcgdex_id ?? "").toLowerCase().includes(query);
+      }
+    } else if (selectedSet) {
+      matches = card.setName === selectedSet;
+    }
+
     cardEl.style.display = matches ? "" : "none";
+  });
+}
+
+function getFilterState(suffix) {
+  const searchInput = document.getElementById(`search-input${suffix}`);
+  const toggle = document.getElementById(`search-toggle${suffix}`);
+  const select = document.getElementById(`set-filter${suffix}`);
+  return {
+    searchValue: searchInput.value.trim(),
+    searchMode: toggle.dataset.mode,
+    selectedSet: select.value,
+  };
+}
+
+function setupToolbar(suffix) {
+  const searchInput = document.getElementById(`search-input${suffix}`);
+  const toggle = document.getElementById(`search-toggle${suffix}`);
+  const select = document.getElementById(`set-filter${suffix}`);
+  const clearBtn = document.getElementById(`clear-filter${suffix}`);
+
+  // Toggle between set name and card ID search
+  toggle.addEventListener("click", () => {
+    if (toggle.dataset.mode === "set") {
+      toggle.dataset.mode = "id";
+      toggle.textContent = "Card ID";
+    } else {
+      toggle.dataset.mode = "set";
+      toggle.textContent = "Set Name";
+    }
+    const state = getFilterState(suffix);
+    applyFilters(state.searchValue, state.searchMode, state.selectedSet);
+  });
+
+  // Typing in search clears the dropdown
+  searchInput.addEventListener("input", () => {
+    if (searchInput.value.trim()) {
+      select.value = "";
+    }
+    const state = getFilterState(suffix);
+    applyFilters(state.searchValue, state.searchMode, state.selectedSet);
+  });
+
+  // Changing dropdown clears the search
+  select.addEventListener("change", () => {
+    if (select.value) {
+      searchInput.value = "";
+    }
+    const state = getFilterState(suffix);
+    applyFilters(state.searchValue, state.searchMode, state.selectedSet);
+  });
+
+  // Clear button resets dropdown and search
+  clearBtn.addEventListener("click", () => {
+    select.value = "";
+    searchInput.value = "";
+    applyFilters("", toggle.dataset.mode, "");
   });
 }
 
@@ -141,14 +209,8 @@ for (const name of POKEMON) {
 
 updateCounts();
 populateSetFilter();
-
-document.getElementById("set-filter").addEventListener("change", (e) => {
-  applyFilter(e.target.value);
-});
-
-document.getElementById("set-filter-not-collected").addEventListener("change", (e) => {
-  applyFilter(e.target.value);
-});
+setupToolbar("");
+setupToolbar("-not-collected");
 
 document.getElementById("export-collected").addEventListener("click", () => {
   exportToCSV(true, "collected.csv");
