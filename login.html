@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>TCG Tracker - Login</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .login-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        gap: 20px;
+      }
+
+      .login-title {
+        font-family: "Montserrat", sans-serif;
+        font-size: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #e8955a;
+      }
+
+      .login-btn {
+        background-color: #e8955a;
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        cursor: pointer;
+        font-family: "Montserrat", sans-serif;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .login-btn:hover {
+        background-color: #a95316;
+      }
+
+      .login-error {
+        color: #e87a5a;
+        font-family: "Montserrat", sans-serif;
+        font-size: 14px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <h1 class="login-title">TCG Tracker</h1>
+      <button class="login-btn" id="google-login-btn">
+        Sign in with Google
+      </button>
+      <p class="login-error" id="login-error">Sign-in failed. Please try again.</p>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCVMshULvIHhIDHy1frmcTkdISzUPh34JE",
+        authDomain: "tcg-tracker-1997.firebaseapp.com",
+        projectId: "tcg-tracker-1997",
+        storageBucket: "tcg-tracker-1997.firebasestorage.app",
+        messagingSenderId: "938343601183",
+        appId: "1:938343601183:web:cd7d8582d52dbd519ab12a"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+
+      // If already logged in, redirect to main page
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          window.location.href = "/index.html";
+        }
+      });
+
+      document.getElementById("google-login-btn").addEventListener("click", async () => {
+        try {
+          await signInWithPopup(auth, provider);
+          window.location.href = "/index.html";
+        } catch (error) {
+          document.getElementById("login-error").style.display = "block";
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -144,7 +144,7 @@ async function fetchAllCards() {
 
   while (true) {
     const res = await fetch(
-      `http://localhost:1337/api/cards?pagination[page]=${page}&pagination[pageSize]=100`,
+      `https://proper-beef-d29be7b03c.strapiapp.com/api/cards?pagination[page]=${page}&pagination[pageSize]=100`,
     );
     const json = await res.json();
     allFetched = allFetched.concat(json.data);
@@ -182,7 +182,7 @@ async function fetchAllCards() {
       const isNowOwned = cardEl.parentElement.id === `not-collected-${belongsTo}`;
 
       const res = await fetch(
-        `http://localhost:1337/api/cards/${card.documentId}`,
+        `https://proper-beef-d29be7b03c.strapiapp.com/api/cards/${card.documentId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
