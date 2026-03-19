@@ -7,27 +7,50 @@
   </head>
   <body>
     <nav>
-      <button class="active" data-tab="collected">
-        Collected <span id="count-collected">0</span>
-      </button>
-      <button data-tab="not-collected">
-        Not Collected <span id="count-not-collected">0</span>
-      </button>
+      <div class="button-container">
+        <button class="active" data-tab="collected">
+          Collected <span id="count-collected">0</span>
+        </button>
+        <button data-tab="not-collected">
+          Not Collected <span id="count-not-collected">0</span>
+        </button>
+      </div>
     </nav>
 
     <div id="tab-collected" class="tab-panel active">
-      <h2 class="pokemon-title">Growlithe</h2>
-      <div class="card-container" id="collected-growlithe"></div>
-      <h2 class="pokemon-title">Arcanine</h2>
-      <div class="card-container" id="collected-arcanine"></div>
+      <div class="toolbar">
+        <select id="set-filter">
+          <option value="">All Sets</option>
+        </select>
+        <button class="export-btn" id="export-collected">Export Collected</button>
+      </div>
+      <div class="pokemon-section">
+        <h2 class="pokemon-title">Growlithe</h2>
+        <div class="card-container" id="collected-growlithe"></div>
+      </div>
+      <div class="pokemon-section">
+        <h2 class="pokemon-title">Arcanine</h2>
+        <div class="card-container" id="collected-arcanine"></div>
+      </div>
     </div>
 
     <div id="tab-not-collected" class="tab-panel">
-      <h2 class="pokemon-title">Growlithe</h2>
-      <div class="card-container" id="not-collected-growlithe"></div>
-      <h2 class="pokemon-title">Arcanine</h2>
-      <div class="card-container" id="not-collected-arcanine"></div>
+      <div class="toolbar">
+        <select id="set-filter-not-collected">
+          <option value="">All Sets</option>
+        </select>
+        <button class="export-btn" id="export-not-collected">Export Not Collected</button>
+      </div>
+      <div class="pokemon-section">
+        <h2 class="pokemon-title">Growlithe</h2>
+        <div class="card-container" id="not-collected-growlithe"></div>
+      </div>
+      <div class="pokemon-section">
+        <h2 class="pokemon-title">Arcanine</h2>
+        <div class="card-container" id="not-collected-arcanine"></div>
+      </div>
     </div>
+
     <script>
       document.querySelectorAll("nav button").forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -41,6 +64,12 @@
           document
             .getElementById(`tab-${btn.dataset.tab}`)
             .classList.add("active");
+        });
+      });
+
+      document.querySelectorAll(".pokemon-title").forEach((title) => {
+        title.addEventListener("click", () => {
+          title.closest(".pokemon-section").classList.toggle("collapsed");
         });
       });
     </script>

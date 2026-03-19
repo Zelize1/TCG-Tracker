@@ -1,23 +1,45 @@
+@font-face {
+  font-family: "Montserrat";
+  src: url(/assets/Montserrat/Montserrat-VariableFont_wght.ttf);
+}
+
 body,
 html {
   margin: 0;
+  color: white;
+  background-color: rgb(39, 32, 32);
 }
 
 nav {
   background-color: #323d48;
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: 100px;
-  gap: 30px;
+  height: 70px;
+}
+
+.button-container {
+  display: flex;
+  gap: 5px;
+  width: 100%;
   justify-content: center;
 }
 
-nav a {
-  text-decoration: none;
+.button-container button {
+  background-color: #e8955a;
+  border: none;
   color: white;
-  text-transform: uppercase;
-  font-family: Arial, Helvetica, sans-serif;
-  align-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 15px;
+  width: 100%;
+  font-family: "Montserrat", sans-serif;
+}
+
+.button-container button:hover {
+  background-color: #a95316;
 }
 
 nav a:hover {
@@ -27,8 +49,46 @@ nav a:hover {
 .tab-panel {
   display: none;
 }
+
 .tab-panel.active {
   display: block;
+}
+
+/* Toolbar: holds filter dropdown and export button */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #3f4d5a;
+}
+
+.toolbar select {
+  background-color: #323d48;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.toolbar select:hover {
+  background-color: #3f4d5a;
+}
+
+.export-btn {
+  background-color: #323d48;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+}
+
+.export-btn:hover {
+  background-color: #3f4d5a;
 }
 
 .card-container {
@@ -39,7 +99,11 @@ nav a:hover {
 }
 
 .card-container .card {
-    max-width: 170px;
+  max-width: 170px;
+  font-family: "Montserrat", sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 360px;
 }
 
 .card-container .card img {
@@ -47,13 +111,67 @@ nav a:hover {
   height: auto;
 }
 
+.card-container .card .card-set {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.card-container .card .card-id {
+  font-size: 14px;
+  margin-top: -10px;
+}
+
 .card-container .card img:hover {
-  transform: scale(1.10);
+  transform: scale(1.1);
   transition: transform 0.3s ease;
 }
 
-.pokemon-title {
-    text-align: center;
-    text-transform: uppercase;
+.card-container .card .card-price {
+  font-size: 14px;
+  margin-top: -10px;
+  color: #eac4a8;
+}
 
+/* Collapsable pokemon sections */
+.pokemon-title {
+  text-align: center;
+  text-transform: uppercase;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pokemon-title::before {
+  content: "▼";
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+.pokemon-section.collapsed .pokemon-title::before {
+  content: "▶";
+}
+
+.pokemon-section.collapsed .card-container {
+  display: none;
+}
+
+.collect-btn {
+  background-color: #e8955a;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+}
+
+.collect-btn:hover {
+  background-color: #a95316;
+}
+
+.card-container .card .collect-btn {
+  margin-top: auto;
 }
