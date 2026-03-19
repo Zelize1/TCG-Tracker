@@ -166,22 +166,24 @@ nav a:hover {
 
 /* Card grid */
 .card-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
   gap: 25px;
   padding: 20px;
+  align-items: stretch;
 }
 
 .card-container .card {
-  max-width: 170px;
   font-family: "Montserrat", sans-serif;
   display: flex;
   flex-direction: column;
-  height: 360px;
+  height: 100%;
+  min-height: 360px;
+  width: 100%;
 }
 
 .card-container .card img {
-  width: 150px;
+  width: 100%;
   height: auto;
 }
 
@@ -196,7 +198,7 @@ nav a:hover {
 }
 
 .card-container .card img:hover {
-  transform: scale(1.1);
+  transform: scale(1.04);
   transition: transform 0.3s ease;
 }
 
@@ -240,12 +242,25 @@ nav a:hover {
   padding: 10px 20px;
   cursor: pointer;
   font-family: "Montserrat", sans-serif;
+  margin-top: auto;
 }
 
 .collect-btn:hover {
   background-color: #a95316;
 }
 
-.card-container .card .collect-btn {
-  margin-top: auto;
+.collection-total {
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+  padding: 12px 20px;
+  border-bottom: 1px solid #3f4d5a;
+  background-color: #1e2830;
+  text-align: center;
+}
+
+.collection-total span {
+  color: #eac4a8;
+  font-weight: bold;
 }
