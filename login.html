@@ -53,12 +53,14 @@
       <button class="login-btn" id="google-login-btn">
         Sign in with Google
       </button>
-      <p class="login-error" id="login-error">Sign-in failed. Please try again.</p>
+      <p class="login-error" id="login-error">Access denied. This tracker is private.</p>
     </div>
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-      import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+      import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+      const ALLOWED_EMAIL = "ceciliehansen402@gmail.com";
 
       const firebaseConfig = {
         apiKey: "AIzaSyCVMshULvIHhIDHy1frmcTkdISzUPh34JE",
@@ -73,17 +75,22 @@
       const auth = getAuth(app);
       const provider = new GoogleAuthProvider();
 
-      // If already logged in, redirect to main page
+      // If already logged in with correct account, redirect to main page
       onAuthStateChanged(auth, (user) => {
-        if (user) {
+        if (user && user.email === ALLOWED_EMAIL) {
           window.location.href = "/index.html";
         }
       });
 
       document.getElementById("google-login-btn").addEventListener("click", async () => {
         try {
-          await signInWithPopup(auth, provider);
-          window.location.href = "/index.html";
+          const result = await signInWithPopup(auth, provider);
+          if (result.user.email !== ALLOWED_EMAIL) {
+            await signOut(auth);
+            document.getElementById("login-error").style.display = "block";
+          } else {
+            window.location.href = "/index.html";
+          }
         } catch (error) {
           document.getElementById("login-error").style.display = "block";
         }
