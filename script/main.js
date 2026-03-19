@@ -18,6 +18,13 @@ function updateCounts() {
     `(${notCollectedTotal})`;
 }
 
+function updateTotalValue() {
+  const total = allCards
+    .filter(({ card }) => card.collected)
+    .reduce((sum, { card }) => sum + (card.trendPrice || 0), 0);
+  document.getElementById("total-value").textContent = `€${total.toFixed(2)}`;
+}
+
 function populateSetFilter() {
   const setNames = [...new Set(allCards.map(({ card }) => card.setName).filter(Boolean))].sort();
 
@@ -68,7 +75,6 @@ function setupToolbar(suffix) {
   const select = document.getElementById(`set-filter${suffix}`);
   const clearBtn = document.getElementById(`clear-filter${suffix}`);
 
-  // Toggle between set name and card ID search
   toggle.addEventListener("click", () => {
     if (toggle.dataset.mode === "set") {
       toggle.dataset.mode = "id";
@@ -81,7 +87,6 @@ function setupToolbar(suffix) {
     applyFilters(state.searchValue, state.searchMode, state.selectedSet);
   });
 
-  // Typing in search clears the dropdown
   searchInput.addEventListener("input", () => {
     if (searchInput.value.trim()) {
       select.value = "";
@@ -90,7 +95,6 @@ function setupToolbar(suffix) {
     applyFilters(state.searchValue, state.searchMode, state.selectedSet);
   });
 
-  // Changing dropdown clears the search
   select.addEventListener("change", () => {
     if (select.value) {
       searchInput.value = "";
@@ -99,7 +103,6 @@ function setupToolbar(suffix) {
     applyFilters(state.searchValue, state.searchMode, state.selectedSet);
   });
 
-  // Clear button resets dropdown and search
   clearBtn.addEventListener("click", () => {
     select.value = "";
     searchInput.value = "";
@@ -126,26 +129,41 @@ function exportToCSV(collectedStatus, filename) {
   URL.revokeObjectURL(url);
 }
 
-async function fetchPrice(tcgdexId, priceEl) {
+async function fetchPrice(tcgdexId, priceEl, card) {
   const res = await fetch(`https://api.tcgdex.net/v2/en/cards/${tcgdexId}`);
   const data = await res.json();
   const trendPrice = data.pricing?.cardmarket?.trend;
   priceEl.textContent = trendPrice ? `€${trendPrice.toFixed(2)}` : "No price";
+  card.trendPrice = trendPrice || 0;
+  updateTotalValue();
 }
 
-async function fetchCards(pokemonName) {
-  const res = await fetch(
-    `http://localhost:1337/api/cards?filters[name][$eqi]=${pokemonName}&pagination[pageSize]=100`,
-  );
-  const json = await res.json();
-  const cardList = json.data;
+async function fetchAllCards() {
+  let page = 1;
+  let allFetched = [];
 
-  const collectedContainer = document.getElementById(`collected-${pokemonName}`);
-  const notCollectedContainer = document.getElementById(`not-collected-${pokemonName}`);
+  while (true) {
+    const res = await fetch(
+      `http://localhost:1337/api/cards?pagination[page]=${page}&pagination[pageSize]=100`,
+    );
+    const json = await res.json();
+    allFetched = allFetched.concat(json.data);
+    if (page >= json.meta.pagination.pageCount) break;
+    page++;
+  }
 
   const priceFetches = [];
 
-  for (const card of cardList) {
+  for (const card of allFetched) {
+    const belongsTo = POKEMON.find((name) =>
+      card.name.toLowerCase().includes(name.toLowerCase()),
+    );
+
+    if (!belongsTo) continue;
+
+    const collectedContainer = document.getElementById(`collected-${belongsTo}`);
+    const notCollectedContainer = document.getElementById(`not-collected-${belongsTo}`);
+
     const imageUrl = card.imageUrl || "./assets/cardback.png";
 
     const cardEl = document.createElement("div");
@@ -161,7 +179,7 @@ async function fetchCards(pokemonName) {
     const btn = cardEl.querySelector(".collect-btn");
 
     btn.addEventListener("click", async () => {
-      const isNowOwned = cardEl.parentElement.id === `not-collected-${pokemonName}`;
+      const isNowOwned = cardEl.parentElement.id === `not-collected-${belongsTo}`;
 
       const res = await fetch(
         `http://localhost:1337/api/cards/${card.documentId}`,
@@ -183,6 +201,7 @@ async function fetchCards(pokemonName) {
           card.collected = false;
         }
         updateCounts();
+        updateTotalValue();
       } else {
         console.error("Failed to update card:", await res.json());
       }
@@ -197,15 +216,13 @@ async function fetchCards(pokemonName) {
     allCards.push({ card, cardEl });
 
     const priceEl = cardEl.querySelector(".card-price");
-    priceFetches.push(fetchPrice(card.tcgdex_id, priceEl));
+    priceFetches.push(fetchPrice(card.tcgdex_id, priceEl, card));
   }
 
   Promise.all(priceFetches);
 }
 
-for (const name of POKEMON) {
-  await fetchCards(name);
-}
+await fetchAllCards();
 
 updateCounts();
 populateSetFilter();
