@@ -2,32 +2,37 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TCG Tracker</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <nav>
       <div class="button-container">
-        <button class="active" data-tab="collected">
-          Collected <span id="count-collected">0</span>
+        <button id="tab-toggle" data-current="collected">
+          Collected <span id="count-tab-display">(0)</span>
         </button>
-        <button data-tab="not-collected">
-          Not Collected <span id="count-not-collected">0</span>
-        </button>
+        <button class="mobile-menu-btn" id="mobile-menu-btn">⚙</button>
       </div>
     </nav>
 
+    <span id="count-collected" style="display:none">0</span>
+    <span id="count-not-collected" style="display:none">0</span>
+
     <div id="tab-collected" class="tab-panel active">
-      <div class="toolbar">
+      <!-- Desktop toolbar -->
+      <div class="toolbar desktop-toolbar">
         <div class="toolbar-left">
           <div class="search-group">
-            <input type="text" id="search-input" placeholder="Search..." />
             <button class="toggle-btn" id="search-toggle" data-mode="set">Set Name</button>
+            <input type="text" id="search-input" placeholder="Search..." />
+            <button class="clear-btn" id="clear-search">✕</button>
           </div>
           <div class="filter-group">
-            <select id="set-filter">
-              <option value="">All Sets</option>
-            </select>
+            <div class="custom-select" id="set-filter-container">
+              <button class="custom-select-btn" id="set-filter-btn">All Sets</button>
+              <div class="custom-select-dropdown" id="set-filter-dropdown"></div>
+            </div>
             <button class="clear-btn" id="clear-filter">✕</button>
           </div>
         </div>
@@ -36,6 +41,25 @@
           <button class="logout-btn" id="logout-btn">Sign Out</button>
         </div>
       </div>
+
+      <!-- Mobile dropdown -->
+      <div class="mobile-dropdown" id="mobile-dropdown-collected">
+        <div class="search-group">
+          <button class="toggle-btn" id="search-toggle-mobile" data-mode="set">Set</button>
+          <input type="text" id="search-input-mobile" placeholder="Search..." />
+          <button class="clear-btn" id="clear-search-mobile">✕</button>
+        </div>
+        <div class="filter-group">
+          <div class="custom-select" id="set-filter-container-mobile">
+            <button class="custom-select-btn" id="set-filter-btn-mobile">All Sets</button>
+            <div class="custom-select-dropdown" id="set-filter-dropdown-mobile"></div>
+          </div>
+          <button class="clear-btn" id="clear-filter-mobile">✕</button>
+        </div>
+        <button class="export-btn" id="export-collected-mobile">Export Collected</button>
+        <button class="logout-btn" id="logout-btn-mobile">Sign Out</button>
+      </div>
+
       <p class="loading-indicator" id="loading-collected">Loading cards...</p>
       <p class="collection-total">Total collection value: <span id="total-value">...</span></p>
       <div class="pokemon-section">
@@ -49,16 +73,19 @@
     </div>
 
     <div id="tab-not-collected" class="tab-panel">
-      <div class="toolbar">
+      <!-- Desktop toolbar -->
+      <div class="toolbar desktop-toolbar">
         <div class="toolbar-left">
           <div class="search-group">
-            <input type="text" id="search-input-not-collected" placeholder="Search..." />
             <button class="toggle-btn" id="search-toggle-not-collected" data-mode="set">Set Name</button>
+            <input type="text" id="search-input-not-collected" placeholder="Search..." />
+            <button class="clear-btn" id="clear-search-not-collected">✕</button>
           </div>
           <div class="filter-group">
-            <select id="set-filter-not-collected">
-              <option value="">All Sets</option>
-            </select>
+            <div class="custom-select" id="set-filter-container-not-collected">
+              <button class="custom-select-btn" id="set-filter-btn-not-collected">All Sets</button>
+              <div class="custom-select-dropdown" id="set-filter-dropdown-not-collected"></div>
+            </div>
             <button class="clear-btn" id="clear-filter-not-collected">✕</button>
           </div>
         </div>
@@ -66,6 +93,24 @@
           <button class="export-btn" id="export-not-collected">Export Not Collected</button>
         </div>
       </div>
+
+      <!-- Mobile dropdown -->
+      <div class="mobile-dropdown" id="mobile-dropdown-not-collected">
+        <div class="search-group">
+          <button class="toggle-btn" id="search-toggle-not-collected-mobile" data-mode="set">Set</button>
+          <input type="text" id="search-input-not-collected-mobile" placeholder="Search..." />
+          <button class="clear-btn" id="clear-search-not-collected-mobile">✕</button>
+        </div>
+        <div class="filter-group">
+          <div class="custom-select" id="set-filter-container-not-collected-mobile">
+            <button class="custom-select-btn" id="set-filter-btn-not-collected-mobile">All Sets</button>
+            <div class="custom-select-dropdown" id="set-filter-dropdown-not-collected-mobile"></div>
+          </div>
+          <button class="clear-btn" id="clear-filter-not-collected-mobile">✕</button>
+        </div>
+        <button class="export-btn" id="export-not-collected-mobile">Export Not Collected</button>
+      </div>
+
       <p class="loading-indicator" id="loading-not-collected">Loading cards...</p>
       <div class="pokemon-section">
         <h2 class="pokemon-title">Growlithe <span class="section-count" id="count-not-collected-growlithe"></span></h2>
@@ -104,32 +149,60 @@
         }
       });
 
-      document.getElementById("logout-btn").addEventListener("click", async () => {
+      const signOutHandler = async () => {
         await signOut(auth);
         window.location.href = "/login.html";
-      });
+      };
+
+      document.getElementById("logout-btn").addEventListener("click", signOutHandler);
+      document.getElementById("logout-btn-mobile").addEventListener("click", signOutHandler);
     </script>
 
     <script>
-      document.querySelectorAll("nav button").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          document
-            .querySelectorAll("nav button")
-            .forEach((b) => b.classList.remove("active"));
-          document
-            .querySelectorAll(".tab-panel")
-            .forEach((p) => p.classList.remove("active"));
-          btn.classList.add("active");
-          document
-            .getElementById(`tab-${btn.dataset.tab}`)
-            .classList.add("active");
-        });
+      const tabToggle = document.getElementById("tab-toggle");
+
+      tabToggle.addEventListener("click", () => {
+        const current = tabToggle.dataset.current;
+        const next = current === "collected" ? "not-collected" : "collected";
+
+        document.querySelectorAll(".tab-panel").forEach((p) => p.classList.remove("active"));
+        document.getElementById(`tab-${next}`).classList.add("active");
+
+        document.querySelectorAll(".mobile-dropdown").forEach((d) => d.classList.remove("open"));
+        document.querySelectorAll(".custom-select-dropdown").forEach((d) => d.classList.remove("open"));
+
+        tabToggle.dataset.current = next;
+        updateToggleLabel();
       });
+
+      function updateToggleLabel() {
+        const current = tabToggle.dataset.current;
+        const count = document.getElementById(`count-${current}`).textContent;
+        const label = current === "collected" ? "Collected" : "Not Collected";
+        document.getElementById("count-tab-display").textContent = count;
+        tabToggle.childNodes[0].textContent = `${label} `;
+      }
 
       document.querySelectorAll(".pokemon-title").forEach((title) => {
         title.addEventListener("click", () => {
           title.closest(".pokemon-section").classList.toggle("collapsed");
         });
+      });
+
+      document.getElementById("mobile-menu-btn").addEventListener("click", (e) => {
+        e.stopPropagation();
+        const current = tabToggle.dataset.current;
+        const dropdown = document.getElementById(`mobile-dropdown-${current}`);
+        dropdown.classList.toggle("open");
+      });
+
+      document.addEventListener("click", () => {
+        document.querySelectorAll(".mobile-dropdown").forEach((d) => d.classList.remove("open"));
+        document.querySelectorAll(".custom-select-dropdown").forEach((d) => d.classList.remove("open"));
+      });
+
+      document.querySelectorAll(".mobile-dropdown").forEach((d) => {
+        d.addEventListener("click", (e) => e.stopPropagation());
       });
     </script>
     <script src="/script/main.js" type="module"></script>
