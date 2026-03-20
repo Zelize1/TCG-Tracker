@@ -209,14 +209,28 @@ nav a:hover {
   height: auto;
 }
 
-.card-container .card .card-set {
+.card-container .card .card-name {
+  font-size: 13px;
   font-weight: bold;
   margin-top: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-container .card .card-set {
+  font-size: 12px;
+  color: #888;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-container .card .card-id {
-  font-size: 14px;
-  margin-top: -10px;
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
 }
 
 .card-container .card img:hover {
@@ -226,7 +240,7 @@ nav a:hover {
 
 .card-container .card .card-price {
   font-size: 14px;
-  margin-top: -10px;
+  margin-top: 4px;
   color: #eac4a8;
 }
 
@@ -255,6 +269,13 @@ nav a:hover {
 
 .pokemon-section.collapsed .card-container {
   display: none;
+}
+
+.section-count {
+  font-size: 14px;
+  font-weight: normal;
+  color: #888;
+  text-transform: none;
 }
 
 .collect-btn {

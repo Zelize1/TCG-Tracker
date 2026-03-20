@@ -12,10 +12,20 @@ function updateCounts() {
     );
   }, 0);
 
-  document.getElementById("count-collected").textContent =
-    `(${collectedTotal})`;
-  document.getElementById("count-not-collected").textContent =
-    `(${notCollectedTotal})`;
+  document.getElementById("count-collected").textContent = `(${collectedTotal})`;
+  document.getElementById("count-not-collected").textContent = `(${notCollectedTotal})`;
+
+  // Update per-pokemon section counts
+  POKEMON.forEach((name) => {
+    const collectedCount = document.getElementById(`collected-${name}`).children.length;
+    const notCollectedCount = document.getElementById(`not-collected-${name}`).children.length;
+    const total = collectedCount + notCollectedCount;
+
+    document.getElementById(`count-collected-${name}`).textContent =
+      `${collectedCount}/${total}`;
+    document.getElementById(`count-not-collected-${name}`).textContent =
+      `${notCollectedCount}/${total}`;
+  });
 }
 
 function updateTotalValue() {
@@ -170,6 +180,7 @@ async function fetchAllCards() {
     cardEl.classList.add("card");
     cardEl.innerHTML = `
       <img src="${imageUrl}" alt="${card.name}" onerror="this.src='./assets/cardback.png'">
+      <p class="card-name">${card.name}</p>
       <p class="card-set">${card.setName ?? "Unknown Set"}</p>
       <p class="card-id">${card.tcgdex_id}</p>
       <p class="card-price">...</p>
