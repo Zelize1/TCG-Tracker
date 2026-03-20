@@ -15,6 +15,7 @@
           Not Collected <span id="count-not-collected">0</span>
         </button>
       </div>
+      <button class="logout-btn" id="logout-btn">Sign Out</button>
     </nav>
 
     <div id="tab-collected" class="tab-panel active">
@@ -96,13 +97,18 @@
           window.location.href = "/login.html";
         }
       });
+
+      document.getElementById("logout-btn").addEventListener("click", async () => {
+        await signOut(auth);
+        window.location.href = "/login.html";
+      });
     </script>
 
     <script>
-      document.querySelectorAll("nav button").forEach((btn) => {
+      document.querySelectorAll("nav button:not(#logout-btn)").forEach((btn) => {
         btn.addEventListener("click", () => {
           document
-            .querySelectorAll("nav button")
+            .querySelectorAll("nav button:not(#logout-btn)")
             .forEach((b) => b.classList.remove("active"));
           document
             .querySelectorAll(".tab-panel")
