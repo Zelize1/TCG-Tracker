@@ -224,6 +224,9 @@ async function fetchAllCards() {
 
 await fetchAllCards();
 
+document.getElementById("loading-collected").style.display = "none";
+document.getElementById("loading-not-collected").style.display = "none";
+
 updateCounts();
 populateSetFilter();
 setupToolbar("");

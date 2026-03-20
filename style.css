@@ -171,18 +171,14 @@ nav a:hover {
 }
 
 .logout-btn {
-  background-color: #323d48;
-  color: #e8955a;
+  background: none;
   border: 1px solid #e8955a;
+  color: #e8955a;
   padding: 8px 16px;
   cursor: pointer;
   font-family: "Montserrat", sans-serif;
   font-size: 14px;
   white-space: nowrap;
-  border-radius: 0;
-  -webkit-appearance: none;
-  appearance: none;
-  outline: none;
 }
 
 .logout-btn:hover {
@@ -289,4 +285,13 @@ nav a:hover {
 .collection-total span {
   color: #eac4a8;
   font-weight: bold;
+}
+
+.loading-indicator {
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+  padding: 40px 20px;
+  letter-spacing: 0.05em;
 }
