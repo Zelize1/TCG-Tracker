@@ -60,7 +60,7 @@
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
       import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-      const ALLOWED_EMAIL = "ceciliehansen402@gmail.com";
+      const ALLOWED_UID = "asEkPuaOLOUk4afIu7LAuCIQoR22";
 
       const firebaseConfig = {
         apiKey: "AIzaSyCVMshULvIHhIDHy1frmcTkdISzUPh34JE",
@@ -75,9 +75,8 @@
       const auth = getAuth(app);
       const provider = new GoogleAuthProvider();
 
-      // If already logged in with correct account, redirect to main page
       onAuthStateChanged(auth, (user) => {
-        if (user && user.email === ALLOWED_EMAIL) {
+        if (user && user.uid === ALLOWED_UID) {
           window.location.href = "/index.html";
         }
       });
@@ -85,7 +84,7 @@
       document.getElementById("google-login-btn").addEventListener("click", async () => {
         try {
           const result = await signInWithPopup(auth, provider);
-          if (result.user.email !== ALLOWED_EMAIL) {
+          if (result.user.uid !== ALLOWED_UID) {
             await signOut(auth);
             document.getElementById("login-error").style.display = "block";
           } else {

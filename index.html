@@ -74,7 +74,7 @@
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
       import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-      const ALLOWED_EMAIL = "ceciliehansen402@gmail.com";
+      const ALLOWED_UID = "asEkPuaOLOUk4afIu7LAuCIQoR22";
 
       const firebaseConfig = {
         apiKey: "AIzaSyCVMshULvIHhIDHy1frmcTkdISzUPh34JE",
@@ -91,7 +91,7 @@
       onAuthStateChanged(auth, async (user) => {
         if (!user) {
           window.location.href = "/login.html";
-        } else if (user.email !== ALLOWED_EMAIL) {
+        } else if (user.uid !== ALLOWED_UID) {
           await signOut(auth);
           window.location.href = "/login.html";
         }
